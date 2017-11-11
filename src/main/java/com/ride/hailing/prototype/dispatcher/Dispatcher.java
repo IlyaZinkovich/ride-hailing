@@ -8,12 +8,10 @@ import akka.event.LoggingAdapter;
 import akka.routing.Broadcast;
 import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Router;
-import com.ride.hailing.prototype.driver.Driver;
-import com.ride.hailing.prototype.driver.commands.Hail;
-import com.ride.hailing.prototype.passenger.Passenger;
 import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
 import com.ride.hailing.prototype.dispatcher.commands.RegisterDriver;
-import com.ride.hailing.prototype.dispatcher.commands.RegisterPassenger;
+import com.ride.hailing.prototype.driver.Driver;
+import com.ride.hailing.prototype.driver.commands.Hail;
 
 public class Dispatcher extends AbstractActor {
 
@@ -33,12 +31,6 @@ public class Dispatcher extends AbstractActor {
                     final ActorRef registeredDriver = context().actorOf(Driver.props(driverName), driverName);
                     router = router.addRoutee(registeredDriver);
                     log.info("Driver with name `{}` is registered", driverName);
-                })
-                .match(RegisterPassenger.class, registerPassenger -> {
-                    final String passengerName = registerPassenger.passengerName();
-                    final ActorRef registeredPassenger =
-                            context().actorOf(Passenger.props(passengerName, self()), passengerName);
-                    log.info("Passenger with name `{}` is registered", passengerName);
                 })
                 .match(ArrangeRide.class, (arrangeRide) -> {
                     final String passengerName = arrangeRide.passengerName();

@@ -5,8 +5,9 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.ride.hailing.prototype.passenger.commands.RideAccepted;
 import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
+import com.ride.hailing.prototype.passenger.commands.RequestRide;
+import com.ride.hailing.prototype.passenger.commands.RideAccepted;
 
 public class Passenger extends AbstractActor {
 
@@ -28,7 +29,7 @@ public class Passenger extends AbstractActor {
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(com.ride.hailing.prototype.passenger.commands.RequestRide.class, (request) -> {
+                .match(RequestRide.class, (request) -> {
                     dispatcher.tell(new ArrangeRide(name), self());
                 })
                 .match(RideAccepted.class, (rideAccepted) -> {
