@@ -6,12 +6,20 @@ import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
+import com.ride.hailing.prototype.driver.commands.RideConfirmed;
+import com.ride.hailing.prototype.driver.commands.RideDeclined;
 import com.ride.hailing.prototype.passenger.commands.RequestRide;
 import com.ride.hailing.prototype.passenger.commands.RideAccepted;
 
-import static com.ride.hailing.prototype.passenger.State.Idle;
-import static com.ride.hailing.prototype.passenger.State.Ride;
-import static com.ride.hailing.prototype.passenger.State.Wait;
+import static com.ride.hailing.prototype.passenger.State.*;
+
+enum State {
+    Idle, Wait, Ride
+}
+
+interface Data {
+
+}
 
 public class Passenger extends AbstractFSM<State, Data> {
 
@@ -20,15 +28,6 @@ public class Passenger extends AbstractFSM<State, Data> {
     private String name;
 
     private ActorRef dispatcher;
-
-    public Passenger(String name, ActorRef dispatcher) {
-        this.name = name;
-        this.dispatcher = dispatcher;
-    }
-
-    public static Props props(String name, ActorRef dispatcher) {
-        return Props.create(Passenger.class, () -> new Passenger(name, dispatcher));
-    }
 
     {
         startWith(Idle, new PassengerInformation());
@@ -43,23 +42,31 @@ public class Passenger extends AbstractFSM<State, Data> {
         when(Wait, matchEvent(RideAccepted.class, RideInformation.class,
                 (rideAccepted, info) -> {
                     log.info("Passenger `{}` rides with driver `{}`", name, rideAccepted.driverName());
+                    sender().tell(new RideConfirmed(name), self());
                     return goTo(Ride).using(info);
                 })
         );
+
+        when(Ride, matchEvent(RideAccepted.class, RideInformation.class,
+                (rideAccepted, rideInformation) -> {
+                    sender().tell(new RideDeclined(), self());
+                    return stay();
+                }));
 
         when(Ride, matchEvent(RideAccepted.class, RideInformation.class,
                 (rideAccepted, rideInformation) -> stay()));
         when(Ride, matchEvent(RequestRide.class, RideInformation.class,
                 (request, data) -> stay()));
     }
-}
 
-enum State {
-    Idle, Wait, Ride
-}
+    public Passenger(String name, ActorRef dispatcher) {
+        this.name = name;
+        this.dispatcher = dispatcher;
+    }
 
-interface Data {
-
+    public static Props props(String name, ActorRef dispatcher) {
+        return Props.create(Passenger.class, () -> new Passenger(name, dispatcher));
+    }
 }
 
 class PassengerInformation implements Data {
