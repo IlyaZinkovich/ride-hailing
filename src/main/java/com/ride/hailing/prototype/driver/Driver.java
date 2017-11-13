@@ -7,17 +7,13 @@ import akka.event.LoggingAdapter;
 import com.ride.hailing.prototype.driver.commands.Hail;
 import com.ride.hailing.prototype.driver.commands.RideConfirmed;
 import com.ride.hailing.prototype.driver.commands.RideDeclined;
+import com.ride.hailing.prototype.driver.fsm.Data;
+import com.ride.hailing.prototype.driver.fsm.DriverInformation;
+import com.ride.hailing.prototype.driver.fsm.RideInformation;
+import com.ride.hailing.prototype.driver.fsm.State;
 import com.ride.hailing.prototype.passenger.commands.RideAccepted;
 
-import static com.ride.hailing.prototype.driver.State.*;
-
-enum State {
-    Idle, Wait, Ride
-}
-
-interface Data {
-
-}
+import static com.ride.hailing.prototype.driver.fsm.State.*;
 
 public class Driver extends AbstractFSM<State, Data> {
 
@@ -64,10 +60,3 @@ public class Driver extends AbstractFSM<State, Data> {
     }
 }
 
-class DriverInformation implements Data {
-
-}
-
-class RideInformation implements Data {
-
-}

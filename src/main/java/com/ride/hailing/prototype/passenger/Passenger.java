@@ -10,16 +10,12 @@ import com.ride.hailing.prototype.driver.commands.RideConfirmed;
 import com.ride.hailing.prototype.driver.commands.RideDeclined;
 import com.ride.hailing.prototype.passenger.commands.RequestRide;
 import com.ride.hailing.prototype.passenger.commands.RideAccepted;
+import com.ride.hailing.prototype.passenger.fsm.Data;
+import com.ride.hailing.prototype.passenger.fsm.PassengerInformation;
+import com.ride.hailing.prototype.passenger.fsm.RideInformation;
+import com.ride.hailing.prototype.passenger.fsm.State;
 
-import static com.ride.hailing.prototype.passenger.State.*;
-
-enum State {
-    Idle, Wait, Ride
-}
-
-interface Data {
-
-}
+import static com.ride.hailing.prototype.passenger.fsm.State.*;
 
 public class Passenger extends AbstractFSM<State, Data> {
 
@@ -69,10 +65,3 @@ public class Passenger extends AbstractFSM<State, Data> {
     }
 }
 
-class PassengerInformation implements Data {
-
-}
-
-class RideInformation implements Data {
-
-}
