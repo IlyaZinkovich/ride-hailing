@@ -1,6 +1,6 @@
 package com.ride.hailing.prototype.passenger;
 
-import akka.actor.AbstractActor;
+import akka.actor.AbstractFSM;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.event.Logging;
@@ -9,7 +9,11 @@ import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
 import com.ride.hailing.prototype.passenger.commands.RequestRide;
 import com.ride.hailing.prototype.passenger.commands.RideAccepted;
 
-public class Passenger extends AbstractActor {
+import static com.ride.hailing.prototype.passenger.State.Idle;
+import static com.ride.hailing.prototype.passenger.State.Ride;
+import static com.ride.hailing.prototype.passenger.State.Wait;
+
+public class Passenger extends AbstractFSM<State, Data> {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
@@ -26,15 +30,42 @@ public class Passenger extends AbstractActor {
         return Props.create(Passenger.class, () -> new Passenger(name, dispatcher));
     }
 
-    @Override
-    public Receive createReceive() {
-        return receiveBuilder()
-                .match(RequestRide.class, (request) -> {
+    {
+        startWith(Idle, new PassengerInformation());
+
+        when(Idle, matchEvent(RequestRide.class, PassengerInformation.class,
+                (request, info) -> {
                     dispatcher.tell(new ArrangeRide(name), self());
+                    return goTo(Wait).using(new RideInformation());
                 })
-                .match(RideAccepted.class, (rideAccepted) -> {
+        );
+
+        when(Wait, matchEvent(RideAccepted.class, RideInformation.class,
+                (rideAccepted, info) -> {
                     log.info("Passenger `{}` rides with driver `{}`", name, rideAccepted.driverName());
+                    return goTo(Ride).using(info);
                 })
-                .build();
+        );
+
+        when(Ride, matchEvent(RideAccepted.class, RideInformation.class,
+                (rideAccepted, rideInformation) -> stay()));
+        when(Ride, matchEvent(RequestRide.class, RideInformation.class,
+                (request, data) -> stay()));
     }
+}
+
+enum State {
+    Idle, Wait, Ride
+}
+
+interface Data {
+
+}
+
+class PassengerInformation implements Data {
+
+}
+
+class RideInformation implements Data {
+
 }
