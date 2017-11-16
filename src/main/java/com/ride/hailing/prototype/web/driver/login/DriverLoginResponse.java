@@ -1,13 +1,13 @@
 package com.ride.hailing.prototype.web.driver.login;
 
-public class LoginResponse {
+public class DriverLoginResponse {
 
     private String driverId;
 
-    public LoginResponse() {
+    public DriverLoginResponse() {
     }
 
-    public LoginResponse(String driverId) {
+    public DriverLoginResponse(String driverId) {
         this.driverId = driverId;
     }
 
