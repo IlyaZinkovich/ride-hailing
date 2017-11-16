@@ -10,6 +10,7 @@ import com.ride.hailing.prototype.driver.commands.RideConfirmed;
 import com.ride.hailing.prototype.driver.commands.RideDeclined;
 import com.ride.hailing.prototype.passenger.commands.RequestRide;
 import com.ride.hailing.prototype.passenger.commands.RideAccepted;
+import com.ride.hailing.prototype.passenger.endpoint.PassengerEndpoint;
 import com.ride.hailing.prototype.passenger.fsm.Data;
 import com.ride.hailing.prototype.passenger.fsm.PassengerInformation;
 import com.ride.hailing.prototype.passenger.fsm.RideInformation;
@@ -22,10 +23,14 @@ public class Passenger extends AbstractFSM<State, Data> {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
     private String name;
-
     private ActorRef dispatcher;
+    private PassengerEndpoint passengerEndpoint;
 
-    {
+    public Passenger(String name, ActorRef dispatcher, PassengerEndpoint passengerEndpoint) {
+        this.name = name;
+        this.dispatcher = dispatcher;
+        this.passengerEndpoint = passengerEndpoint;
+
         startWith(Idle, new PassengerInformation());
 
         when(Idle, matchEvent(RequestRide.class, PassengerInformation.class,
@@ -55,13 +60,8 @@ public class Passenger extends AbstractFSM<State, Data> {
                 (request, data) -> stay()));
     }
 
-    public Passenger(String name, ActorRef dispatcher) {
-        this.name = name;
-        this.dispatcher = dispatcher;
-    }
-
-    public static Props props(String name, ActorRef dispatcher) {
-        return Props.create(Passenger.class, () -> new Passenger(name, dispatcher));
+    public static Props props(String name, ActorRef dispatcher, PassengerEndpoint passengerEndpoint) {
+        return Props.create(Passenger.class, () -> new Passenger(name, dispatcher, passengerEndpoint));
     }
 }
 

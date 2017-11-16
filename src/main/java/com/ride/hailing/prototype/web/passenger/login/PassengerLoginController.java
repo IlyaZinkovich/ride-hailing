@@ -3,6 +3,7 @@ package com.ride.hailing.prototype.web.passenger.login;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import com.ride.hailing.prototype.passenger.Passenger;
+import com.ride.hailing.prototype.passenger.endpoint.PassengerEndpoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +26,8 @@ public class PassengerLoginController {
     @PostMapping(path = "/login/passenger")
     public PassengerLoginResponse loginPassenger(@RequestBody Credentials credentials) {
         String passengerName = credentials.getEmail().split("@")[0];
-        actorSystem.actorOf(Passenger.props(passengerName, ActorRef.noSender()), passengerName);
+        PassengerEndpoint passengerEndpoint = new PassengerEndpoint("/passenger/" + passengerName, messagingTemplate);
+        actorSystem.actorOf(Passenger.props(passengerName, ActorRef.noSender(), passengerEndpoint), passengerName);
         return new PassengerLoginResponse(passengerName);
-    }
-
-    private void sendMessageToClient(String passengerName) {
-        messagingTemplate.convertAndSend("/passengers/" + passengerName, new PassengerLoginResponse(passengerName));
     }
 }
