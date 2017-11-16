@@ -1,60 +1,44 @@
-var stompClient = null;
-
-function setConnected(connected) {
-    $("#connect").prop("disabled", connected);
-    $("#disconnect").prop("disabled", !connected);
-    if (connected) {
-        $("#conversation").show();
-    }
-    else {
-        $("#conversation").hide();
-    }
-    $("#greetings").html("");
-}
-
-function connect() {
-    var socket = new SockJS('/ride-hailing');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({}, function (frame) {
-        setConnected(true);
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/topic/greetings', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
-        });
-    });
-}
-
-function disconnect() {
-    if (stompClient !== null) {
-        stompClient.disconnect();
-    }
-    setConnected(false);
-    console.log("Disconnected");
-}
+var driverStompClient;
 
 function loginDriver() {
-    stompClient.send("/app/login/driver", {}, JSON.stringify({'driverName': $("#driver-name").val()}));
+  var email = $("#driver-email").val();
+  var password = $("#driver-password").val();
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8282/login/driver',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    data: JSON.stringify({'email': email, 'password': password}),
+    success : function(response) {
+      var socket = new SockJS('/ride-hailing/driver');
+      stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/drivers/' + response.driverId, function (data) {
+          console.log('Received from server' + data);
+        });
+        stompClient.send('/app/drivers/' + response.driverId + '/location', {}, '{"lat": 52.520645, "lng": 13.409779}');
+      });
+    }
+  });
 }
 
-function loginPassenger() {
-    stompClient.send("/app/login/passenger", {}, JSON.stringify({'passengerName': $("#passenger-name").val()}));
-}
+var passengerStompClient;
 
-function requestRide() {
-    stompClient.send("/app/ride", {}, JSON.stringify({'passengerName': $("#ride-passenger-name").val()}));
-}
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function connect(endpoint) {
+  var socket = new SockJS(endpoint);
+  var stompClient = Stomp.over(socket);
+  stompClient.connect();
+  return stompClient;
 }
 
 $(function () {
-    $("form").on('submit', function (e) {
-        e.preventDefault();
-    });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#login-driver" ).click(function() { loginDriver(); });
-    $( "#login-passenger" ).click(function() { loginPassenger(); });
-    $( "#request-ride" ).click(function() { requestRide(); });
+  $("#connectDriver").click(function() { driverStompClient = connect('/ride-hailing/driver'); });
+  $("#connectPassenger").click(function() { passengerStompClient = connect('/ride-hailing/passenger'); });
+  $( "#login-driver" ).click(function() { loginDriver(); });
+  $( "#login-passenger" ).click(function() { loginPassenger(); });
+  $( "#request-ride" ).click(function() { requestRide(); });
 });
