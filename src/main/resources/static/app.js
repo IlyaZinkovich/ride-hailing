@@ -1,29 +1,3 @@
-function loginDriver() {
-  var email = $("#driver-email").val();
-  var password = $("#driver-password").val();
-
-  $.ajax({
-    type: 'POST',
-    url: 'http://localhost:8282/login/driver',
-    headers: {
-      'Accept': 'application/json; charset=utf-8',
-      'Content-Type': 'application/json; charset=utf-8'
-    },
-    data: JSON.stringify({ 'email': email, 'password': password }),
-    success: function (response) {
-      var socket = new SockJS('/ride-hailing/driver-app');
-      var stompClient = Stomp.over(socket);
-      stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
-        stompClient.subscribe('/drivers/' + response.driverId, function (data) {
-          console.log('Received from server' + data);
-        });
-        stompClient.send('/app/drivers/' + response.driverId + '/location', {}, '{"lat": 52.520645, "lng": 13.409779}');
-      });
-    }
-  });
-}
-
 function requestRide() {
   var passengerName = $("#passenger-email").val().split("@")[0];
 
