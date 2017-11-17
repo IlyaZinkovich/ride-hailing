@@ -13,24 +13,6 @@
             <div class="col-md-3">
                 <div class="panel panel-default">
                     <div class="panel-heading text-center">
-                        Ride-hailing app
-                    </div>
-                    <div class="panel-body text-center app">
-                        <div class="panel-frame">
-                            <h3>Choose application type</h3>
-                        </div>
-                    </div>
-                    <div class="panel-footer control">
-                        <div class="btn-group btn-group-justified">
-                            <a id="connectPassenger" class="btn btn-default">Passenger</a>
-                            <a id="connectDriver" class="btn btn-default">Driver</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="panel panel-default">
-                    <div class="panel-heading text-center">
                         Driver app
                     </div>
                     <div class="panel-body text-center app">
@@ -114,26 +96,26 @@
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/webjars/handlebars/4.0.10/handlebars.min.js"></script>
-    <script id="base-template" type="text/x-handlebars-template">
-    <div id="app-{{appNumber}}" class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-heading text-center">
-                Ride-hailing app {{appNumber}}
-            </div>
-            <div class="panel-body text-center app">
-                <div class="panel-frame">
-                    <h3>Choose application type</h3>
+    <script id="home-template" type="text/x-handlebars-template">
+        <div id="app-{{appNumber}}" class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    Ride-hailing app {{appNumber}}
                 </div>
-            </div>
-            <div class="panel-footer control">
-                <div class="btn-group btn-group-justified">
-                    <a id="connect-passenger-{{appNumber}}" class="btn btn-default">Passenger</a>
-                    <a id="connect-driver-{{appNumber}}" class="btn btn-default">Driver</a>
+                <div class="panel-body text-center app">
+                    <div class="panel-frame">
+                        <h3>Choose application type</h3>
+                    </div>
+                </div>
+                <div class="panel-footer control">
+                    <div class="btn-group btn-group-justified">
+                        <a id="connect-passenger-{{appNumber}}" class="btn btn-default">Passenger</a>
+                        <a id="connect-driver-{{appNumber}}" class="btn btn-default">Driver</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</script>
+    </script>
     <script src="/app.js"></script>
 </body>
 

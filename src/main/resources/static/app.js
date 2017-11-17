@@ -88,7 +88,7 @@ $(function () {
 var appsNumber = 0;
 
 function initializeNewApp() {
-  var source = $("#base-template").html();
+  var source = $("#home-template").html();
   var template = Handlebars.compile(source);
   appNumber = appsNumber + 1;
   var data = { 'appNumber':  appNumber};
