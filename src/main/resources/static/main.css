@@ -25,3 +25,11 @@ body {
 .map {
 	height: 100%;
 }
+
+.panel-body {
+    padding: 0;
+}
+
+.panel-frame {
+    padding: 15px;
+}
