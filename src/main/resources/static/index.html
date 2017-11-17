@@ -116,6 +116,64 @@
             </div>
         </div>
     </script>
+    <script id="login-passenger-template" type="text/x-handlebars-template">
+        <div id="app-{{appNumber}}" class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    Ride-hailing app {{appNumber}}
+                </div>
+                <div class="panel-body text-center app">
+                    <div class="panel-frame">
+                        <h4>Passenger Login</h4>
+                        <form>
+                            <div class="form-group">
+                                <label for="passenger-{{appNumber}}-email">Email</label>
+                                <input type="email" class="form-control" id="passenger-{{appNumber}}-email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="passenger-{{appNumber}}-password">Password</label>
+                                <input type="password" class="form-control" id="password-{{appNumber}}-passenger" placeholder="Password">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel-footer control">
+                    <div class="btn-group btn-group-justified">
+                        <a id="login-passenger-{{appNumber}}" class="btn btn-default">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="login-driver-template" type="text/x-handlebars-template">
+        <div id="app-{{appNumber}}" class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    Ride-hailing app {{appNumber}}
+                </div>
+                <div class="panel-body text-center app">
+                    <div class="panel-frame">
+                        <h4>Driver Login</h3>
+                        <form>
+                            <div class="form-group">
+                                <label for="driver-{{appNumber}}-email">Email</label>
+                                <input type="email" class="form-control" id="driver-{{appNumber}}-email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="driver-{{appNumber}}-password">Password</label>
+                                <input type="password" class="form-control" id="driver-{{appNumber}}-passenger" placeholder="Password">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="panel-footer control">
+                    <div class="btn-group btn-group-justified">
+                        <a id="login-driver-{{appNumber}}" class="btn btn-default">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
     <script src="/app.js"></script>
 </body>
 
