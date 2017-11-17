@@ -4,14 +4,10 @@
     <title>Hello WebSocket</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
-    <script src="/webjars/jquery/jquery.min.js"></script>
-    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
-    <script src="/app.js"></script>
 </head>
 <body>
-<div class="container apps">
-    <div class="row">
+<div class="container">
+    <div id="apps" class="row">
         <div class="col-md-3">
             <div class="panel panel-default">
                 <div class="panel-heading text-center">
@@ -111,5 +107,31 @@
         </div>
     </div>
 </div>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<script src="/webjars/handlebars/4.0.10/handlebars.min.js"></script>
+<script id="base-template" type="text/x-handlebars-template">
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading text-center">
+                Ride-hailing app
+            </div>
+            <div class="panel-body text-center app">
+                <div class="panel-frame">
+                    <h3>Choose application type</h3>
+                </div>
+            </div>
+            <div class="panel-footer control">
+                <div class="btn-group btn-group-justified">
+                    <a id="connectA" class="btn btn-default">Passenger</a>
+                    <a id="connectB" class="btn btn-default">Driver</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+<script src="/app.js"></script>
 </body>
 </html>

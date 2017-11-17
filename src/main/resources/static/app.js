@@ -84,3 +84,8 @@ $(function () {
   $("#login-passenger").click(function() { loginPassenger(); });
   $("#request-ride").click(function() { requestRide(); });
 });
+
+var source = $("#base-template").html();
+var template = Handlebars.compile(source);
+var data = {};
+$("#apps").html(template(data));
