@@ -1,4 +1,4 @@
-package com.ride.hailing.prototype.dispatcher.commands;
+package com.ride.hailing.prototype.driver.commands;
 
 public class RegisterDriver {
 

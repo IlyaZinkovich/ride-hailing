@@ -5,7 +5,7 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
+import com.ride.hailing.prototype.driver.commands.ArrangeRide;
 import com.ride.hailing.prototype.driver.commands.RideConfirmed;
 import com.ride.hailing.prototype.driver.commands.RideDeclined;
 import com.ride.hailing.prototype.passenger.commands.RequestRide;
@@ -23,19 +23,19 @@ public class Passenger extends AbstractFSM<State, Data> {
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
     private String name;
-    private ActorRef dispatcher;
+    private ActorRef drivers;
     private PassengerEndpoint passengerEndpoint;
 
-    public Passenger(String name, ActorRef dispatcher, PassengerEndpoint passengerEndpoint) {
+    public Passenger(String name, ActorRef drivers, PassengerEndpoint passengerEndpoint) {
         this.name = name;
-        this.dispatcher = dispatcher;
+        this.drivers = drivers;
         this.passengerEndpoint = passengerEndpoint;
 
         startWith(Idle, new PassengerInformation());
 
         when(Idle, matchEvent(RequestRide.class, PassengerInformation.class,
                 (request, info) -> {
-                    dispatcher.tell(new ArrangeRide(name), self());
+                    drivers.tell(new ArrangeRide(name), self());
                     return goTo(Wait).using(new RideInformation());
                 })
         );
@@ -60,8 +60,8 @@ public class Passenger extends AbstractFSM<State, Data> {
                 (request, data) -> stay()));
     }
 
-    public static Props props(String name, ActorRef dispatcher, PassengerEndpoint passengerEndpoint) {
-        return Props.create(Passenger.class, () -> new Passenger(name, dispatcher, passengerEndpoint));
+    public static Props props(String name, ActorRef drivers, PassengerEndpoint passengerEndpoint) {
+        return Props.create(Passenger.class, () -> new Passenger(name, drivers, passengerEndpoint));
     }
 }
 

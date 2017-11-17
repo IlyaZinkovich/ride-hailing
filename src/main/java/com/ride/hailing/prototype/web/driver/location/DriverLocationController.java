@@ -1,6 +1,6 @@
 package com.ride.hailing.prototype.web.driver.location;
 
-import akka.actor.ActorSystem;
+import akka.actor.ActorRef;
 import com.ride.hailing.prototype.driver.Location;
 import com.ride.hailing.prototype.driver.commands.ChangeLocation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,10 @@ import static akka.actor.ActorRef.noSender;
 public class DriverLocationController {
 
     @Autowired
-    private ActorSystem actorSystem;
+    private ActorRef drivers;
 
     @MessageMapping("/drivers/{driverId}/location")
     public void changeLocation(@DestinationVariable String driverId, DriverLocation driverLocation) {
-        actorSystem.actorSelection("/user/" + driverId)
-                .tell(new ChangeLocation(new Location(driverLocation.getLng(), driverLocation.getLat())), noSender());
+        drivers.tell(new ChangeLocation(driverId, new Location(driverLocation.getLng(), driverLocation.getLat())), noSender());
     }
 }

@@ -2,7 +2,7 @@ package com.ride.hailing.prototype;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
-import com.ride.hailing.prototype.dispatcher.Dispatcher;
+import com.ride.hailing.prototype.driver.Drivers;
 import com.ride.hailing.prototype.passenger.Passengers;
 import com.ride.hailing.prototype.passenger.endpoint.PassengerEndpointFactory;
 import org.springframework.boot.SpringApplication;
@@ -23,12 +23,12 @@ public class App {
     }
 
     @Bean
-    public ActorRef dispatcher(ActorSystem system) {
-        return system.actorOf(Dispatcher.props(), "ride-dispatcher");
+    public ActorRef drivers(ActorSystem system) {
+        return system.actorOf(Drivers.props(), "drivers");
     }
 
     @Bean
-    public ActorRef passengers(ActorSystem system, ActorRef dispatcher, SimpMessagingTemplate messagingTemplate) {
-        return system.actorOf(Passengers.props(dispatcher, new PassengerEndpointFactory(messagingTemplate)), "passengers");
+    public ActorRef passengers(ActorSystem system, ActorRef drivers, SimpMessagingTemplate messagingTemplate) {
+        return system.actorOf(Passengers.props(drivers, new PassengerEndpointFactory(messagingTemplate)), "passengers");
     }
 }

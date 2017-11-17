@@ -1,10 +1,10 @@
 package com.ride.hailing.prototype.passenger.commands;
 
-public class LoginPassenger {
+public class RegisterPassenger {
 
     private String name;
 
-    public LoginPassenger(String name) {
+    public RegisterPassenger(String name) {
         this.name = name;
     }
 

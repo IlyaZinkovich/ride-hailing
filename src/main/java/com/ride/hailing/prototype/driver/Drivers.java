@@ -1,4 +1,4 @@
-package com.ride.hailing.prototype.dispatcher;
+package com.ride.hailing.prototype.driver;
 
 import akka.actor.AbstractActor;
 import akka.actor.ActorRef;
@@ -8,19 +8,19 @@ import akka.event.LoggingAdapter;
 import akka.routing.Broadcast;
 import akka.routing.RoundRobinRoutingLogic;
 import akka.routing.Router;
-import com.ride.hailing.prototype.dispatcher.commands.ArrangeRide;
-import com.ride.hailing.prototype.dispatcher.commands.RegisterDriver;
-import com.ride.hailing.prototype.driver.Driver;
+import com.ride.hailing.prototype.driver.commands.ArrangeRide;
+import com.ride.hailing.prototype.driver.commands.ChangeLocation;
 import com.ride.hailing.prototype.driver.commands.Hail;
+import com.ride.hailing.prototype.driver.commands.RegisterDriver;
 
-public class Dispatcher extends AbstractActor {
+public class Drivers extends AbstractActor {
 
     private final LoggingAdapter log = Logging.getLogger(getContext().getSystem(), this);
 
     private Router router = new Router(new RoundRobinRoutingLogic());
 
     public static Props props() {
-        return Props.create(Dispatcher.class, Dispatcher::new);
+        return Props.create(Drivers.class, Drivers::new);
     }
 
     @Override
@@ -32,11 +32,14 @@ public class Dispatcher extends AbstractActor {
                     router = router.addRoutee(registeredDriver);
                     log.info("Driver with name `{}` is registered", driverName);
                 })
-                .match(ArrangeRide.class, (arrangeRide) -> {
+                .match(ArrangeRide.class, arrangeRide -> {
                     final String passengerName = arrangeRide.passengerName();
                     log.info("Arranging a ride for `{}`", passengerName);
                     router.route(new Broadcast(new Hail(passengerName)), sender());
                 })
+                .match(ChangeLocation.class, changeLocation ->
+                        getContext().findChild(changeLocation.driverName()).ifPresent(driver -> driver.tell(changeLocation, self()))
+                )
                 .matchAny(any -> log.error("Unspecified message {}", any))
                 .build();
     }

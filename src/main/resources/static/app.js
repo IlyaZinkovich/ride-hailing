@@ -51,6 +51,23 @@ function loginPassenger() {
   });
 }
 
+function requestRide() {
+  var passengerName = $("#passenger-email").val().split("@")[0];
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:8282/rides',
+    headers: {
+      'Accept': 'application/json; charset=utf-8',
+      'Content-Type': 'application/json; charset=utf-8'
+    },
+    data: JSON.stringify({'passengerName': passengerName}),
+    success : function(response) {
+      console.log(response);
+    }
+  });
+}
+
 var passengerStompClient;
 
 function connect(endpoint) {

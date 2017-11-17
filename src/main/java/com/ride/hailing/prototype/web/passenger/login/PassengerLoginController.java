@@ -1,7 +1,7 @@
 package com.ride.hailing.prototype.web.passenger.login;
 
 import akka.actor.ActorRef;
-import com.ride.hailing.prototype.passenger.commands.LoginPassenger;
+import com.ride.hailing.prototype.passenger.commands.RegisterPassenger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +20,7 @@ public class PassengerLoginController {
     @PostMapping(path = "/login/passenger")
     public PassengerLoginResponse loginPassenger(@RequestBody Credentials credentials) {
         String passengerName = credentials.getEmail().split("@")[0];
-        passengers.tell(new LoginPassenger(passengerName), ActorRef.noSender());
+        passengers.tell(new RegisterPassenger(passengerName), ActorRef.noSender());
         return new PassengerLoginResponse(passengerName);
     }
 }
