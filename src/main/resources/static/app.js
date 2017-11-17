@@ -82,13 +82,17 @@ $(function () {
     var template = Handlebars.compile(source);
     var data = { 'appNumber': appNumber };
     $("#app-" + appNumber).replaceWith(template(data));
+    $("#login-driver-" + appNumber).click(function () {
+      loginDriver(appNumber);
+    });
   }
   
   function loginPassenger(appNumber) {
     var email = $("#passenger-" + appNumber + "-email").val();
     var password = $("#passenger-" + appNumber + "-password").val();
-  
-    post(JSON.stringify({ 'email': email, 'password': password }), function(response) {
+    var url = 'http://localhost:8282/login/passenger';
+    var data = JSON.stringify({ 'email': email, 'password': password });
+    post(url, data, function(response) {
       var socket = new SockJS('/ride-hailing/passenger-app');
       var stompClient = Stomp.over(socket);
       stompClient.connect({}, function (frame) {
@@ -100,10 +104,27 @@ $(function () {
     });
   }
   
-  function post(data, callback) {
+  function loginDriver(appNumber) {
+    var email = $("#driver-" + appNumber + "-email").val();
+    var password = $("#driver-" + appNumber + "-password").val();
+    var data = JSON.stringify({ 'email': email, 'password': password });
+    var url = 'http://localhost:8282/login/driver';
+    post(url, data, function(response) {
+      var socket = new SockJS('/ride-hailing/driver-app');
+      var stompClient = Stomp.over(socket);
+      stompClient.connect({}, function (frame) {
+        console.log('Connected: ' + frame);
+        stompClient.subscribe('/drivers/' + response.driverId, function (data) {
+          console.log('Received from server' + data);
+        });
+      });
+    });
+  }
+  
+  function post(url, data, callback) {
     $.ajax({
       'type': 'POST',
-      'url': 'http://localhost:8282/login/driver',
+      'url': url,
       'headers': {
         'Accept': 'application/json; charset=utf-8',
         'Content-Type': 'application/json; charset=utf-8'
