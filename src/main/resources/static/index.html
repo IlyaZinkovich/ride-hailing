@@ -1,122 +1,124 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Hello WebSocket</title>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/main.css" rel="stylesheet">
 </head>
+
 <body>
-<div class="container">
-    <div id="apps" class="row">
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    Ride-hailing app
-                </div>
-                <div class="panel-body text-center app">
-                    <div class="panel-frame">
-                        <h3>Choose application type</h3>
+    <div class="container">
+        <div id="apps" class="row">
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        Ride-hailing app
                     </div>
-                </div>
-                <div class="panel-footer control">
-                    <div class="btn-group btn-group-justified">
-                        <a id="connectPassenger" class="btn btn-default">Passenger</a>
-                        <a id="connectDriver" class="btn btn-default">Driver</a>
+                    <div class="panel-body text-center app">
+                        <div class="panel-frame">
+                            <h3>Choose application type</h3>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    Driver app
-                </div>
-                <div class="panel-body text-center app">
-                    <div class="panel-frame">
-                        <form>
-                            <div class="form-group">
-                                <label for="driver-email">Email</label>
-                                <input type="email" class="form-control" id="driver-email" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="driver-password">Password</label>
-                                <input type="password" class="form-control" id="driver-password" placeholder="Password">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="panel-footer control">
-                    <div class="btn-group btn-group-justified">
-                        <a id="login-driver" class="btn btn-default">Login</a>
+                    <div class="panel-footer control">
+                        <div class="btn-group btn-group-justified">
+                            <a id="connectPassenger" class="btn btn-default">Passenger</a>
+                            <a id="connectDriver" class="btn btn-default">Driver</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    Passenger app
-                </div>
-                <div class="panel-body text-center app">
-                    <div class="panel-frame">
-                        <form>
-                            <div class="form-group">
-                                <label for="passenger-email">Email</label>
-                                <input type="email" class="form-control" id="passenger-email" placeholder="Email">
-                            </div>
-                            <div class="form-group">
-                                <label for="passenger-password">Password</label>
-                                <input type="password" class="form-control" id="passenger-password" placeholder="Password">
-                            </div>
-                        </form>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        Driver app
                     </div>
-                </div>
-                <div class="panel-footer control">
-                    <div class="btn-group btn-group-justified">
-                        <a id="login-passenger" class="btn btn-default">Login</a>
+                    <div class="panel-body text-center app">
+                        <div class="panel-frame">
+                            <form>
+                                <div class="form-group">
+                                    <label for="driver-email">Email</label>
+                                    <input type="email" class="form-control" id="driver-email" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="driver-password">Password</label>
+                                    <input type="password" class="form-control" id="driver-password" placeholder="Password">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel-footer control">
+                        <div class="btn-group btn-group-justified">
+                            <a id="login-driver" class="btn btn-default">Login</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="panel panel-default">
-                <div class="panel-heading text-center">
-                    Ride-hailing app
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        Passenger app
+                    </div>
+                    <div class="panel-body text-center app">
+                        <div class="panel-frame">
+                            <form>
+                                <div class="form-group">
+                                    <label for="passenger-email">Email</label>
+                                    <input type="email" class="form-control" id="passenger-email" placeholder="Email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="passenger-password">Password</label>
+                                    <input type="password" class="form-control" id="passenger-password" placeholder="Password">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="panel-footer control">
+                        <div class="btn-group btn-group-justified">
+                            <a id="login-passenger" class="btn btn-default">Login</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body text-center app">
-                    <div id="map" class="map"></div>
-                    <script>
-                      var map;
-                      function initMap() {
-                        map = new google.maps.Map(document.getElementById('map'), {
-                          center: {lat: 52.520645, lng: 13.409779},
-                          zoom: 10,
-                          disableDefaultUI: true
-                        });
-                      }
-                    </script>
-                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDheXDMFzd4gwACkRhJAaf-RcFWFKYPVKw&callback=initMap"
-                            async defer></script>
-                </div>
-                <div class="panel-footer control">
-                    <div class="btn-group btn-group-justified">
-                        <a id="request-ride" class="btn btn-default">Ride</a>
+            </div>
+            <div class="col-md-3">
+                <div class="panel panel-default">
+                    <div class="panel-heading text-center">
+                        Ride-hailing app
+                    </div>
+                    <div class="panel-body text-center app">
+                        <div id="map" class="map"></div>
+                        <script>
+                            var map;
+                            function initMap() {
+                                map = new google.maps.Map(document.getElementById('map'), {
+                                    center: { lat: 52.520645, lng: 13.409779 },
+                                    zoom: 10,
+                                    disableDefaultUI: true
+                                });
+                            }
+                        </script>
+                        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDheXDMFzd4gwACkRhJAaf-RcFWFKYPVKw&callback=initMap" async
+                            defer></script>
+                    </div>
+                    <div class="panel-footer control">
+                        <div class="btn-group btn-group-justified">
+                            <a id="request-ride" class="btn btn-default">Ride</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<script src="/webjars/jquery/jquery.min.js"></script>
-<script src="/webjars/sockjs-client/sockjs.min.js"></script>
-<script src="/webjars/stomp-websocket/stomp.min.js"></script>
-<script src="/webjars/stomp-websocket/stomp.min.js"></script>
-<script src="/webjars/handlebars/4.0.10/handlebars.min.js"></script>
-<script id="base-template" type="text/x-handlebars-template">
-    <div class="col-md-3">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script src="/webjars/handlebars/4.0.10/handlebars.min.js"></script>
+    <script id="base-template" type="text/x-handlebars-template">
+    <div id="app-{{appNumber}}" class="col-md-3">
         <div class="panel panel-default">
             <div class="panel-heading text-center">
-                Ride-hailing app
+                Ride-hailing app {{appNumber}}
             </div>
             <div class="panel-body text-center app">
                 <div class="panel-frame">
@@ -125,13 +127,14 @@
             </div>
             <div class="panel-footer control">
                 <div class="btn-group btn-group-justified">
-                    <a id="connectA" class="btn btn-default">Passenger</a>
-                    <a id="connectB" class="btn btn-default">Driver</a>
+                    <a id="connect-passenger-{{appNumber}}" class="btn btn-default">Passenger</a>
+                    <a id="connect-driver-{{appNumber}}" class="btn btn-default">Driver</a>
                 </div>
             </div>
         </div>
     </div>
 </script>
-<script src="/app.js"></script>
+    <script src="/app.js"></script>
 </body>
+
 </html>

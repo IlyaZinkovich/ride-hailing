@@ -11,8 +11,8 @@ function loginDriver() {
       'Accept': 'application/json; charset=utf-8',
       'Content-Type': 'application/json; charset=utf-8'
     },
-    data: JSON.stringify({'email': email, 'password': password}),
-    success : function(response) {
+    data: JSON.stringify({ 'email': email, 'password': password }),
+    success: function (response) {
       var socket = new SockJS('/ride-hailing/driver-app');
       stompClient = Stomp.over(socket);
       stompClient.connect({}, function (frame) {
@@ -37,8 +37,8 @@ function loginPassenger() {
       'Accept': 'application/json; charset=utf-8',
       'Content-Type': 'application/json; charset=utf-8'
     },
-    data: JSON.stringify({'email': email, 'password': password}),
-    success : function(response) {
+    data: JSON.stringify({ 'email': email, 'password': password }),
+    success: function (response) {
       var socket = new SockJS('/ride-hailing/passenger-app');
       stompClient = Stomp.over(socket);
       stompClient.connect({}, function (frame) {
@@ -61,8 +61,8 @@ function requestRide() {
       'Accept': 'application/json; charset=utf-8',
       'Content-Type': 'application/json; charset=utf-8'
     },
-    data: JSON.stringify({'passengerName': passengerName}),
-    success : function(response) {
+    data: JSON.stringify({ 'passengerName': passengerName }),
+    success: function (response) {
       console.log(response);
     }
   });
@@ -78,14 +78,38 @@ function connect(endpoint) {
 }
 
 $(function () {
-  $("#connectDriver").click(function() { driverStompClient = connect('/ride-hailing/driver'); });
-  $("#connectPassenger").click(function() { passengerStompClient = connect('/ride-hailing/passenger'); });
-  $("#login-driver").click(function() { loginDriver(); });
-  $("#login-passenger").click(function() { loginPassenger(); });
-  $("#request-ride").click(function() { requestRide(); });
+  $("#connectDriver").click(function () { driverStompClient = connect('/ride-hailing/driver'); });
+  $("#connectPassenger").click(function () { passengerStompClient = connect('/ride-hailing/passenger'); });
+  $("#login-driver").click(function () { loginDriver(); });
+  $("#login-passenger").click(function () { loginPassenger(); });
+  $("#request-ride").click(function () { requestRide(); });
 });
 
-var source = $("#base-template").html();
-var template = Handlebars.compile(source);
-var data = {};
-$("#apps").html(template(data));
+var appsNumber = 0;
+
+function initializeNewApp() {
+  var source = $("#base-template").html();
+  var template = Handlebars.compile(source);
+  appNumber = appsNumber + 1;
+  var data = { 'appNumber':  appNumber};
+  $("#apps").append(template(data));
+  $("#connect-passenger-" + appNumber).click(function () { 
+    openPassengerApp(appNumber);
+    initializeNewApp();
+  });
+  $("#connect-driver-" + appNumber).click(function () { 
+    openDriverApp(appNumber);
+    initializeNewApp();
+  });
+  appsNumber = appNumber;
+}
+
+function openPassengerApp(appNumber) {
+  console.log("app " + appNumber + " is opened");
+}
+
+function openDriverApp(appNumber) {
+  console.log("app " + appNumber + " is opened");
+}
+
+initializeNewApp();
